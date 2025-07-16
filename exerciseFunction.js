@@ -43,9 +43,42 @@
 
 // capitalize("hello");
 
-object = {
-  name: "Sherwin Kerby F. Atok",
-  age: 2,
+// object = {
+//   name: "Sherwin Kerby F. Atok",
+//   age: 2,
+// };
+// console.log("Hello " + object.name);
+// console.log("Your age is " + object.age);
+
+let arr = [1, 2, 3, 4, 5, 6];
+
+let list = {
+  value: 1,
+  rest: {
+    value: 2,
+    rest: {
+      value: 3,
+      rest: null,
+    },
+  },
 };
-console.log("Hello " + object.name);
-console.log("Your age is " + object.age);
+sum = arr.reduce((acc, curr) => {
+  console.log(curr + acc);
+  return curr + acc;
+}, 0);
+
+listToArray = (list) => {
+  let arr1 = [];
+  while (list !== null) {
+    arr1.push(list.value);
+    list = list.rest;
+  }
+  return arr1;
+};
+
+sumAll = listToArray(list).map((x) => {
+  x.reduce((curr, acc) => {
+    console.log(curr + acc);
+    return curr + acc;
+  });
+});

@@ -60,10 +60,10 @@ deepEqual = (a, b) => {
 
   for (let key of keysA) {
     if (!keysB.includes(key) || !deepEqual(a[key], b[key])) {
-      return false
+      return false;
     }
   }
-  return true
+  return true;
 };
 
 console.log(deepEqual(list1, list2));
