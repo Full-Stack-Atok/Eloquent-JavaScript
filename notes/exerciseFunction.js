@@ -131,22 +131,21 @@
 
 // console.log(doubled(nums1));
 
+// let nested = [
+//   [1, 2],
+//   [3, [4, 5]],
+//   [6, [7, 8]],
+// ];
 
-let nested = [
-  [1, 2],
-  [3, [4, 5]],
-  [6, [7, 8]],
-];
+// deepLevel = (arr) => {
+//   return arr.reduce((acc, curr) => {
+//     if (Array.isArray(curr)) {
+//       acc = acc.concat(deepLevel(curr));
+//     } else {
+//       acc = acc.concat(curr)
+//     }
+//     return acc;
+//   }, [])
+// }
 
-deepLevel = (arr) => {
-  return arr.reduce((acc, curr) => {
-    if (Array.isArray(curr)) {
-      acc = acc.concat(deepLevel(curr));
-    } else {
-      acc = acc.concat(curr)
-    }
-    return acc;
-  }, [])
-}
-
-console.log(deepLevel(nested));
+// console.log(deepLevel(nested));
