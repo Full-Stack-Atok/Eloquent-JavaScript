@@ -235,26 +235,94 @@ class Matrix {
 // temp.fahrenheit = 86;
 // console.log(temp.celsius);
 
-class SymmetricMatrix extends Matrix {
-  constructor(size, element = (x, y) => undefined) {
-    super(size, size, (x, y) => {
-      if (x < y) return element(y, x);
-      else return element(x, y);
-    });
+// class SymmetricMatrix extends Matrix {
+//   constructor(size, element = (x, y) => undefined) {
+//     super(size, size, (x, y) => {
+//       if (x < y) return element(y, x);
+//       else return element(x, y);
+//     });
+//   }
+
+//   set(x, y, value) {
+//     super.set(x, y, value);
+//     if (x != y) {
+//       super.set(y, x, value);
+//     }
+//   }
+// }
+
+// let matrix = new SymmetricMatrix(5, (x, y) => `${x}, ${y}`);
+// console.log(matrix.get(2, 3));
+
+// console.log(new SymmetricMatrix(2) instanceof SymmetricMatrix);
+// console.log(new SymmetricMatrix(2) instanceof Matrix);
+// console.log(new Matrix(2, 2) instanceof SymmetricMatrix);
+// console.log([1] instanceof Array);
+
+class StudentGroup {
+  constructor() {
+    this.groups = [];
   }
 
-  set(x, y, value) {
-    super.set(x, y, value);
-    if (x != y) {
-      super.set(y, x, value);
+  add(name) {
+    try {
+      if (!this.groups.includes(name)) {
+        this.groups.push(name);
+      } else {
+        console.log(`${name} already exists`);
+      }
+    } catch (error) {
+      console.log("Error in  'add' method.", error.message);
+      return error;
     }
+  }
+
+  delete(name) {
+    try {
+      for (let i = 0; i < this.groups.length; i++) {
+        if (this.groups[i] === name) {
+          return this.groups.splice(i, 1);
+        }
+      }
+      return console.log(`${name} does'nt exists?`);
+    } catch (error) {
+      console.log("Error in 'delete' method.", error.message);
+      return error;
+    }
+  }
+
+  has(name) {
+    return this.groups.includes(name);
+  }
+
+  static from(array) {
+    let group = new StudentGroup();
+    for (let names of array) {
+      group.add(names);
+    }
+    return group;
+  }
+
+  [Symbol.iterator]() {
+    let i = 0;
+    let self = this;
+
+    return {
+      next() {
+        if (i < self.groups.length) {
+          return { value: self.groups[i++], done: false };
+        } else {
+          return {
+            done: true,
+          };
+        }
+      },
+    };
   }
 }
 
-let matrix = new SymmetricMatrix(5, (x, y) => `${x}, ${y}`);
-console.log(matrix.get(2, 3));
+const group1 = StudentGroup.from(["abby", "Michael", "Sophia"]);
 
-console.log(new SymmetricMatrix(2) instanceof SymmetricMatrix);
-console.log(new SymmetricMatrix(2) instanceof Matrix);
-console.log(new Matrix(2, 2) instanceof SymmetricMatrix);
-console.log([1] instanceof Array);
+for (let value of group1) {
+  console.log(value);
+}
