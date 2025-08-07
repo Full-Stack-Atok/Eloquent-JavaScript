@@ -18,8 +18,7 @@ const roads = [
 function buildGraph(edges) {
   let graph = Object.create(null);
 
-  function addEdge(from, to) {
-    // "Alice's House": [Bob's House, Cabin, Post Office]
+  function addEdges(from, to) {
     if (graph[from] == null) {
       graph[from] = [to];
     } else {
@@ -28,10 +27,9 @@ function buildGraph(edges) {
   }
 
   for (let [from, to] of edges.map((r) => r.split("-"))) {
-    addEdge(from, to);
-    addEdge(to, from);
+    addEdges(from, to);
+    addEdges(to, from);
   }
-
   return graph;
 }
 
@@ -50,7 +48,7 @@ class VillageState {
       let parcels = this.parcels
         .map((p) => {
           if (p.place != this.place) return p;
-          return { place: destination, address: p.address }; 
+          return { place: destination, address: p.address };
         })
         .filter((p) => p.place != p.address); // p.place = Post Office != Post Office false
       return new VillageState(destination, parcels);
