@@ -60,6 +60,24 @@ console.log("Reading file....");*/
 CREATING A SIMPLE WEB SERVER
 *******************************/
 const html = fs.readFileSync("./template/index.html", "utf-8");
+const products = JSON.parse(fs.readFileSync("./data/products.json", "utf-8"));
+const productListHtml = fs.readFileSync(
+  "./template/product-list.html",
+  "utf-8"
+);
+
+let productsHtmlArray = products.map((p) => {
+  let output = productListHtml.replace("{{%IMAGE%}}", p.productImage);
+  output = output.replace("{{%NAME%}}", p.name);
+  output = output.replace("{{%MODELNAME%}}", p.modelName);
+  output = output.replace("{{%MODELNO%}}", p.modelNumber);
+  output = output.replace("{{%SIZE%}}", p.size);
+  output = output.replace("{{%CAMERA%}}", p.camera);
+  output = output.replace("{{%PRICE%}}", p.price);
+  output = output.replace("{{%COLOR%}}", p.color);
+
+  return output;
+});
 
 // STEP 1: CREATE A SERVER
 const server = http.createServer((request, response) => {
@@ -83,6 +101,13 @@ const server = http.createServer((request, response) => {
       "my-header": "Hello world",
     });
     response.end(html.replace("{{%CONTENT%}}", "You are in Contact page"));
+  } else if (path.toLocaleLowerCase() === "/products") {
+    let productsResponseHtml = html.replace(
+      "{{%CONTENT%}}",
+      productsHtmlArray.join(",")
+    );
+    response.writeHead(200, { "content-type": "text/html" });
+    response.end(productsResponseHtml);
   } else {
     response.writeHead(404, {
       "content-type": "text/html",
