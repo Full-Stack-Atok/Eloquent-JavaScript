@@ -3,10 +3,11 @@ const readline = require("readline");
 const fs = require("fs");
 const http = require("http");
 const url = require("url");
-const replaceHtml = require("./modules/replaceHtml");
+const events = require("events");
 
 // USER DEFINED MODULES
-
+// const replaceHtml = require("./modules/replaceHtml");
+// const user = require("./modules/user");
 // THIRD PARTY MODULES / LIBRARIES
 
 /* LECTURE 4: CODE EXAMPLE
@@ -66,68 +67,111 @@ console.log("Reading file....");*/
 *******************************
 CREATING A SIMPLE WEB SERVER
 *******************************/
-const html = fs.readFileSync("./template/index.html", "utf-8");
-const products = JSON.parse(fs.readFileSync("./data/products.json", "utf-8"));
-const productListHtml = fs.readFileSync(
-  "./template/product-list.html",
-  "utf-8"
-);
-const productDetailsHtml = fs.readFileSync(
-  "./template/product-details.html",
-  "utf-8"
-);
+// const html = fs.readFileSync("./template/index.html", "utf-8");
+// const products = JSON.parse(fs.readFileSync("./data/products.json", "utf-8"));
+// const productListHtml = fs.readFileSync(
+//   "./template/product-list.html",
+//   "utf-8"
+// );
+// const productDetailsHtml = fs.readFileSync(
+//   "./template/product-details.html",
+//   "utf-8"
+// );
 
 // STEP 1: CREATE A SERVER
 // SERVER INHERITS FROM EVENTEMITTER
 const server = http.createServer();
 
-server.on("request", (request, response) => {
-  let { query, pathname: path } = url.parse(request.url, true);
+// server.on("request", (request, response) => {
+//   let { query, pathname: path } = url.parse(request.url, true);
 
-  if (path === "/" || path.toLocaleLowerCase() === "/home") {
-    response.writeHead(200, {
-      "content-type": "text/html",
-      "my-header": "Hello world",
-    });
-    response.end(html.replace("{{%CONTENT%}}", "You are in Home page"));
-  } else if (path.toLocaleLowerCase() === "/about") {
-    response.writeHead(200, {
-      "content-type": "text/html",
-      "my-header": "Hello world",
-    });
-    response.end(html.replace("{{%CONTENT%}}", "You are in About page"));
-  } else if (path.toLocaleLowerCase() === "/contact") {
-    response.writeHead(200, {
-      "content-type": "text/html",
-      "my-header": "Hello world",
-    });
-    response.end(html.replace("{{%CONTENT%}}", "You are in Contact page"));
-  } else if (path.toLocaleLowerCase() === "/products") {
-    if (!query.id) {
-      let productsHtmlArray = products.map((prod) => {
-        return replaceHtml(productListHtml, prod);
-      });
-      let productsResponseHtml = html.replace(
-        "{{%CONTENT%}}",
-        productsHtmlArray.join(",")
-      );
-      response.writeHead(200, { "content-type": "text/html" });
-      response.end(productsResponseHtml);
-    } else {
-      let prod = products[query.id];
-      let productDetailResponseHtml = replaceHtml(productDetailsHtml, prod);
-      response.end(html.replace("{{%CONTENT%}}", productDetailResponseHtml));
-    }
-  } else {
-    response.writeHead(404, {
-      "content-type": "text/html",
-      "my-header": "Hello world",
-    });
-    response.end(html.replace("{{%CONTENT%}}", "Error 404: Page not found"));
-  }
-});
+//   if (path === "/" || path.toLocaleLowerCase() === "/home") {
+//     response.writeHead(200, {
+//       "content-type": "text/html",
+//       "my-header": "Hello world",
+//     });
+//     response.end(html.replace("{{%CONTENT%}}", "You are in Home page"));
+//   } else if (path.toLocaleLowerCase() === "/about") {
+//     response.writeHead(200, {
+//       "content-type": "text/html",
+//       "my-header": "Hello world",
+//     });
+//     response.end(html.replace("{{%CONTENT%}}", "You are in About page"));
+//   } else if (path.toLocaleLowerCase() === "/contact") {
+//     response.writeHead(200, {
+//       "content-type": "text/html",
+//       "my-header": "Hello world",
+//     });
+//     response.end(html.replace("{{%CONTENT%}}", "You are in Contact page"));
+//   } else if (path.toLocaleLowerCase() === "/products") {
+//     if (!query.id) {
+//       let productsHtmlArray = products.map((prod) => {
+//         return replaceHtml(productListHtml, prod);
+//       });
+//       let productsResponseHtml = html.replace(
+//         "{{%CONTENT%}}",
+//         productsHtmlArray.join(",")
+//       );
+//       response.writeHead(200, { "content-type": "text/html" });
+//       response.end(productsResponseHtml);
+//     } else {
+//       let prod = products[query.id];
+//       let productDetailResponseHtml = replaceHtml(productDetailsHtml, prod);
+//       response.end(html.replace("{{%CONTENT%}}", productDetailResponseHtml));
+//     }
+//   } else {
+//     response.writeHead(404, {
+//       "content-type": "text/html",
+//       "my-header": "Hello world",
+//     });
+//     response.end(html.replace("{{%CONTENT%}}", "Error 404: Page not found"));
+//   }
+// });
 
 // STEP 2: START THE SERVER
 server.listen(8000, "127.0.0.1", () => {
   console.log("Server has started!");
+});
+
+/*LECTURE 21: CODE EXAMPLE*******
+EMITTING & HANDLING CUSTOM EVENTS
+********************************/
+
+// let myEmitter = new user();
+
+// myEmitter.on("New user created", (id, name) => {
+//   console.log(`A new user ${name} with ID ${id} is created!`);
+// });
+
+// myEmitter.on("New user created", (id, name) => {
+//   console.log(`A new user ${name} with ID ${id} is added to the database`);
+// });
+
+// myEmitter.emit("New user created", 101, "John");
+
+/*LECTURE 23: CODE EXAMPLE*******
+UNDERSTANDING STREAMS IN PRACTICE
+********************************/
+// SOLUTION 1 - WITHOUT READABLE STREAM
+// server.on("request", (req, res) => {
+//   fs.readFile("./files/input.txt", (err, data) => {
+//     if (err) {
+//       res.end("Something went wrong.");
+//     }
+//     res.end(data);
+//   });
+// });
+
+// SOLUTION 2 - WITH READABLE AND WRITEABLE STREAM
+server.on("request", (req, res) => {
+  let rs = fs.createReadStream("./files/input1.txt");
+
+  rs.on("data", (chunk) => {
+    res.write(chunk);
+    res.end();
+  });
+
+  rs.on("error", (error) => {
+    res.end(error.message);
+  });
 });
