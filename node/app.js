@@ -163,15 +163,27 @@ UNDERSTANDING STREAMS IN PRACTICE
 // });
 
 // SOLUTION 2 - WITH READABLE AND WRITEABLE STREAM
-server.on("request", (req, res) => {
-  let rs = fs.createReadStream("./files/input1.txt");
+// server.on("request", (req, res) => {
+//   let rs = fs.createReadStream("./files/input.txt");
 
-  rs.on("data", (chunk) => {
-    res.write(chunk);
-    res.end();
-  });
+//   rs.on("data", (chunk) => {
+//     res.write(chunk);
+//   });
 
-  rs.on("error", (error) => {
-    res.end(error.message);
-  });
-});
+//   rs.on("end", () => {
+//     res.end();
+//   });
+
+//   rs.on("error", (error) => {
+//     res.end(error.message);
+//   });
+// });
+
+// SOLUTION 3 - USING PIPE METHOD
+
+// server.on("request", (req, res) => {
+//   let rs = fs.ReadStream("./files/input.txt");
+//   rs.pipe(res);
+// });
+
+console.log("Nodemon is running.");
